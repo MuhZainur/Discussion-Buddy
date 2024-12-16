@@ -39,17 +39,17 @@ translator_id_eng = pipeline('translation', model='Helsinki-NLP/opus-mt-id-en', 
 summarizer = pipeline('summarization', model='facebook/bart-large-cnn', device = device) # summarize the news
 ner = pipeline('ner',tokenizer = 'dbmdz/bert-large-cased-finetuned-conll03-english', model='dbmdz/bert-large-cased-finetuned-conll03-english', device = device) # Analyze NER on news
 lang_detector = pipeline('text-classification', model = 'papluca/xlm-roberta-base-language-detection', device = device) #detect language
-news_encoder = load(r'C:\Users\acer\coding\Final_Project_AI_Bootcamp\news_encoder.pkl') #encoder for the news (3 class)
-news_classifier = load(r"C:\Users\acer\coding\Final_Project_AI_Bootcamp\news_classifier.pkl") #classify news into 3 category (Politic, Technology, Science)
-emotion_text_encoder = load(r"C:\Users\acer\coding\Final_Project_AI_Bootcamp\emotion_encoder.pkl") # Encoder for Emotion detection(text version)
-emotion_classifier = load(r"C:\Users\acer\coding\Final_Project_AI_Bootcamp\emotion_model_classifier.pkl") #Detect emotion user based on their comment about news
-with open(r'C:\Users\acer\coding\Final_Project_AI_Bootcamp\class_names_face_recognition.pkl', 'rb') as f: # import and using it as encoder for emotion detection(image version)
+news_encoder = load('news_encoder.pkl') #encoder for the news (3 class)
+news_classifier = load("news_classifier.pkl") #classify news into 3 category (Politic, Technology, Science)
+emotion_text_encoder = load("emotion_encoder.pkl") # Encoder for Emotion detection(text version)
+emotion_classifier = load("emotion_model_classifier.pkl") #Detect emotion user based on their comment about news
+with open('class_names_face_recognition.pkl', 'rb') as f: # import and using it as encoder for emotion detection(image version)
     emotion_face_class = pickle.load(f)
 face_emotion = models.resnet18(pretrained=False) # Detect user emotion based on their expression (selfie)
 face_emotion.fc = nn.Linear(face_emotion.fc.in_features, 5)
 #face_emotion = face_emotion.load_state_dict(torch.load('Best_emotion_face_model.pth'),map_location=torch.device('cpu'))
 device = torch.device("cuda" if torch.cuda.is_available() else 'cpu') # move into GPU if available, so model will using GPU
-state_dict = torch.load(r'C:\Users\acer\coding\Final_Project_AI_Bootcamp\Best_emotion_face_model.pth', map_location=device)
+state_dict = torch.load('Best_emotion_face_model.pth', map_location=device)
 face_emotion.load_state_dict(state_dict)
 face_emotion.to(device)
 face_emotion.eval()
